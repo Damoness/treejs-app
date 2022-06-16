@@ -11,7 +11,7 @@ camera.lookAt(0, 0, 0)
 const scene = new THREE.Scene()
 
 //create a blue LineBasicMaterial
-const material = new THREE.LineBasicMaterial({ color: 0x0000ff })
+const material = new THREE.LineBasicMaterial({ color: 'green' })
 
 const points = []
 points.push(new THREE.Vector3(-10, 0, 0))
