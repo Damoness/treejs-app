@@ -145,7 +145,7 @@ function init() {
 
   window.addEventListener('resize', onWindowResize)
 
-  //initGui()
+  initGui()
 }
 
 function onWindowResize() {
