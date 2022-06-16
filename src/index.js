@@ -1,37 +1,181 @@
 import * as THREE from 'three'
+import './assets/style.css'
 
-const renderer = new THREE.WebGLRenderer()
-renderer.setSize(window.innerWidth, window.innerHeight)
-document.body.appendChild(renderer.domElement)
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500)
-camera.position.set(0, 0, 100)
-camera.lookAt(0, 0, 0)
+import earth_atmos_2048 from './assets/earth_atmos_2048.jpg'
+import earth_specular_2048 from './assets/earth_specular_2048.jpg'
+import earth_normal_2048 from './assets/earth_normal_2048.jpg'
+import moon_1024 from './assets/moon_1024.jpg'
 
-const scene = new THREE.Scene()
+let gui
 
-//create a blue LineBasicMaterial
-const material = new THREE.LineBasicMaterial({ color: 'green' })
+let camera, scene, renderer, labelRenderer
 
-const points = []
-points.push(new THREE.Vector3(-10, 0, 0))
-points.push(new THREE.Vector3(0, 10, 0))
-points.push(new THREE.Vector3(10, 0, 0))
+const layers = {
+  'Toggle Name': function () {
+    camera.layers.toggle(0)
+  },
+  'Toggle Mass': function () {
+    camera.layers.toggle(1)
+  },
+  'Enable All': function () {
+    camera.layers.enableAll()
+  },
 
-const geometry = new THREE.BufferGeometry().setFromPoints(points)
+  'Disable All': function () {
+    camera.layers.disableAll()
+  },
+}
 
-const line = new THREE.Line(geometry, material)
+const clock = new THREE.Clock()
+const textureLoader = new THREE.TextureLoader()
 
-scene.add(line)
-renderer.render(scene, camera)
+let moon
+
+init()
+animate()
+
+function init() {
+  const EARTH_RADIUS = 1
+  const MOON_RADIUS = 0.27
+
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200)
+  camera.position.set(10, 5, 20)
+  camera.layers.enableAll()
+  camera.layers.toggle(1)
+
+  scene = new THREE.Scene()
+
+  const dirLight = new THREE.DirectionalLight(0xffffff)
+  dirLight.position.set(0, 0, 1)
+  dirLight.layers.enableAll()
+  scene.add(dirLight)
+
+  const axesHelper = new THREE.AxesHelper(4)
+  axesHelper.layers.enableAll()
+  scene.add(axesHelper)
+
+  //
+
+  const earthGeometry = new THREE.SphereGeometry(EARTH_RADIUS, 16, 16)
+  const earthMaterial = new THREE.MeshPhongMaterial({
+    specular: 0x333333,
+    shininess: 5,
+    map: textureLoader.load(earth_atmos_2048),
+    specularMap: textureLoader.load(earth_specular_2048),
+    normalMap: textureLoader.load(earth_normal_2048),
+    normalScale: new THREE.Vector2(0.85, 0.85),
+  })
+  const earth = new THREE.Mesh(earthGeometry, earthMaterial)
+  scene.add(earth)
+
+  const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 16, 16)
+  const moonMaterial = new THREE.MeshPhongMaterial({
+    shininess: 5,
+    map: textureLoader.load(moon_1024),
+  })
+  moon = new THREE.Mesh(moonGeometry, moonMaterial)
+  scene.add(moon)
+
+  //
+
+  earth.layers.enableAll()
+  moon.layers.enableAll()
+
+  const earthDiv = document.createElement('div')
+  earthDiv.className = 'label'
+  earthDiv.textContent = 'Earth'
+  earthDiv.style.marginTop = '-1em'
+  const earthLabel = new CSS2DObject(earthDiv)
+  earthLabel.position.set(0, EARTH_RADIUS, 0)
+  earth.add(earthLabel)
+  earthLabel.layers.set(0)
+
+  const earthMassDiv = document.createElement('div')
+  earthMassDiv.className = 'label'
+  earthMassDiv.textContent = '5.97237e24 kg'
+  earthMassDiv.style.marginTop = '-1em'
+  const earthMassLabel = new CSS2DObject(earthMassDiv)
+  earthMassLabel.position.set(0, -2 * EARTH_RADIUS, 0)
+  earth.add(earthMassLabel)
+  earthMassLabel.layers.set(1)
+
+  const moonDiv = document.createElement('div')
+  moonDiv.className = 'label'
+  moonDiv.textContent = 'Moon'
+  moonDiv.style.marginTop = '-1em'
+  //moonDiv.style.backgroundColor = 'blue'
+  const moonLabel = new CSS2DObject(moonDiv)
+  moonLabel.position.set(0, MOON_RADIUS, 0)
+  moon.add(moonLabel)
+  moonLabel.layers.set(0)
+
+  const moonMassDiv = document.createElement('div')
+  moonMassDiv.className = 'label'
+  moonMassDiv.textContent = '7.342e22 kg'
+  moonMassDiv.style.marginTop = '-1em'
+  //moonMassDiv.style.backgroundColor = 'red'
+  const moonMassLabel = new CSS2DObject(moonMassDiv)
+  moonMassLabel.position.set(0, -2 * MOON_RADIUS, 0)
+  moon.add(moonMassLabel)
+  moonMassLabel.layers.set(1)
+
+  //
+
+  renderer = new THREE.WebGLRenderer()
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  document.body.appendChild(renderer.domElement)
+
+  labelRenderer = new CSS2DRenderer()
+  labelRenderer.setSize(window.innerWidth, window.innerHeight)
+  labelRenderer.domElement.style.position = 'absolute'
+  labelRenderer.domElement.style.top = '0px'
+  labelRenderer.domElement.id = 'test'
+  document.body.appendChild(labelRenderer.domElement)
+
+  const controls = new OrbitControls(camera, labelRenderer.domElement)
+  controls.minDistance = 5
+  controls.maxDistance = 100
+
+  //
+
+  window.addEventListener('resize', onWindowResize)
+
+  //initGui()
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight
+
+  camera.updateProjectionMatrix()
+
+  renderer.setSize(window.innerWidth, window.innerHeight)
+
+  labelRenderer.setSize(window.innerWidth, window.innerHeight)
+}
 
 function animate() {
   requestAnimationFrame(animate)
 
-  cube.rotation.x += 0.01
-  cube.rotation.y += 0.01
+  const elapsed = clock.getElapsedTime()
+
+  moon.position.set(Math.sin(elapsed) * 5, 0, Math.cos(elapsed) * 5)
 
   renderer.render(scene, camera)
+  labelRenderer.render(scene, camera)
 }
 
-animate()
+//
+
+function initGui() {
+  gui = new GUI()
+
+  gui.add(layers, 'Toggle Name')
+  gui.add(layers, 'Toggle Mass')
+  gui.add(layers, 'Enable All')
+  gui.add(layers, 'Disable All')
+}
