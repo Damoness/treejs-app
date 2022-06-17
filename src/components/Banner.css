@@ -1,0 +1,39 @@
+
+
+.container {
+  background-color: white;
+  border-radius: 15px;
+  margin: 0 30px;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+
+.title {
+  color: white;
+  background: linear-gradient(rgb(144,196,255), rgb(75,100,255));
+  font-size: 28px;
+  padding: 2px 30px;
+}
+
+.codeContainer {
+  background-color: rgb(252,94,70);
+  border-radius: 15px; 
+  padding: 2px 20px;
+  color: white;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px 0;
+}
+.code {
+  font-size:22px;
+  line-height: normal;
+  margin-left: 10px;
+}
+
+.bottom { 
+  color: rgb(130, 150, 200);
+  border: 1px solid gray;
+  padding: 2px 15px;
+}
+

@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import Checkout from './Checkout'
+import App from './App'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
@@ -149,7 +149,7 @@ function init() {
 
   window.addEventListener('resize', onWindowResize)
 
-  initGui()
+  //initGui()
 
   addDiv()
 }
@@ -164,7 +164,7 @@ function addDiv() {
   const root = ReactDOM.createRoot(reactDiv)
   root.render(
     <React.StrictMode>
-      <Checkout />
+      <App />
     </React.StrictMode>
   )
 }
