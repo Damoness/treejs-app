@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { PerspectiveCamera, Scene, WebGLRenderer } from 'three'
 import App from './App'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -7,6 +8,8 @@ import './assets/style.css'
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
+
+// @ts-ignore
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
 import earth_atmos_2048 from './assets/earth_atmos_2048.jpg'
@@ -16,7 +19,7 @@ import moon_1024 from './assets/moon_1024.jpg'
 
 let gui
 
-let camera, scene, renderer, labelRenderer
+let camera: PerspectiveCamera, scene: Scene, renderer: WebGLRenderer, labelRenderer: CSS2DRenderer
 
 const layers = {
   'Toggle Name': function () {
@@ -37,7 +40,7 @@ const layers = {
 const clock = new THREE.Clock()
 const textureLoader = new THREE.TextureLoader()
 
-let moon
+let moon: any
 
 init()
 animate()
@@ -60,7 +63,7 @@ function init() {
 
   const axesHelper = new THREE.AxesHelper(4)
   axesHelper.layers.enableAll()
-  scene.add(axesHelper)
+  //scene.add(axesHelper)
 
   //
 
@@ -91,7 +94,7 @@ function init() {
 
   const earthDiv = document.createElement('div')
   earthDiv.className = 'label'
-  earthDiv.textContent = 'Earth'
+  earthDiv.textContent = '地球'
   earthDiv.style.marginTop = '-1em'
   const earthLabel = new CSS2DObject(earthDiv)
   earthLabel.position.set(0, EARTH_RADIUS, 0)
@@ -109,7 +112,7 @@ function init() {
 
   const moonDiv = document.createElement('div')
   moonDiv.className = 'label'
-  moonDiv.textContent = 'Moon'
+  moonDiv.textContent = '月亮'
   moonDiv.style.marginTop = '-1em'
   //moonDiv.style.backgroundColor = 'blue'
   const moonLabel = new CSS2DObject(moonDiv)
@@ -162,11 +165,7 @@ function addDiv() {
 
   //const root = ReactDOM.createRoot(document.getElementById('reactRoot'))
   const root = ReactDOM.createRoot(reactDiv)
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  )
+  root.render(<App />)
 }
 
 function onWindowResize() {
@@ -191,7 +190,6 @@ function animate() {
 }
 
 //
-
 function initGui() {
   gui = new GUI()
 

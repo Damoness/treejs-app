@@ -5,7 +5,7 @@ const buildPath = './build/'
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   plugins: [
     new HtmlWebpackPlugin({
       title: 'tree js',
@@ -32,6 +32,9 @@ module.exports = {
         },
       },
     },
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
   },
   module: {
     rules: [
@@ -77,6 +80,11 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
     ],
   },

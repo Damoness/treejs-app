@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import './Banner.css'
 
 export default function Banner() {
