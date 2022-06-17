@@ -1,4 +1,8 @@
 import * as THREE from 'three'
+import Checkout from './Checkout'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
 import './assets/style.css'
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -146,6 +150,23 @@ function init() {
   window.addEventListener('resize', onWindowResize)
 
   initGui()
+
+  addDiv()
+}
+
+function addDiv() {
+  const reactDiv = document.createElement('div')
+  reactDiv.className = 'react'
+  reactDiv.id = 'reactRoot'
+  document.body.appendChild(reactDiv)
+
+  //const root = ReactDOM.createRoot(document.getElementById('reactRoot'))
+  const root = ReactDOM.createRoot(reactDiv)
+  root.render(
+    <React.StrictMode>
+      <Checkout />
+    </React.StrictMode>
+  )
 }
 
 function onWindowResize() {

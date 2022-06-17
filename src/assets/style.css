@@ -5,3 +5,13 @@
   padding: 2px;
   background: rgba( 0, 0, 0, .6 );
 }
+
+.react {
+	background-color: red;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	/* z-index: 1; */
+}
