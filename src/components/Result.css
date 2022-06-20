@@ -1,0 +1,72 @@
+.result-container {
+  position: absolute;
+  background-color: rgba(71, 71, 71,0.7);
+  top: 0;
+  left: 0;
+
+  justify-content: center;
+  align-items: center;
+}
+
+
+#scoreTitle {
+  color: white;
+}
+
+#score {
+  font-size: 30px;
+  padding: 0px 50px;
+  margin-top: 10px;
+  color: white;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.6) 50%,rgba(255,255,255,0) 100%);
+  /* background: radial-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0)) */
+}
+
+
+#result {
+
+  align-self: stretch;
+  height: 200px;
+  margin: 15px 20px 0;
+
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 15px;
+
+  border: thick double white;
+
+  background:radial-gradient(closest-corner ellipse,white 60% , rgba(170,210,255)) ;
+}
+
+.flexRow {
+  flex-direction: row;
+  align-self: stretch;
+  padding: 0px 20px;
+  justify-content: space-between;
+
+  margin-top: 20px;
+}
+
+.buttonBack {
+  width: 45%;
+
+  border: solid white ;
+  border-radius: 20px;
+  background-color: rgb(87, 158, 255);
+  font-size: 25px;
+  color: white;
+}
+
+.buttonReplay {
+  width: 45%;
+
+  border: solid white ;
+  border-radius: 20px;
+  background-color: rgb(251, 137, 56);
+  font-size: 25px;
+  color: white;
+}
+
+
+

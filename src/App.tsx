@@ -1,5 +1,6 @@
 import React from 'react'
-import { Banner } from './components'
+import { Banner, Result } from './components'
+import {} from './components'
 import ReactDOM from 'react-dom/client'
 
 export function addDiv() {
@@ -10,7 +11,16 @@ export function addDiv() {
 
   //const root = ReactDOM.createRoot(document.getElementById('reactRoot'))
   const root = ReactDOM.createRoot(reactDiv)
-  root.render(<App />)
+  root.render([
+    <App />,
+    <Result
+      success
+      score={10}
+      onReplay={() => {
+        alert('11')
+      }}
+    />,
+  ])
 }
 
 export default function App() {
